@@ -6,8 +6,7 @@ import Sidebar from "./Sidebar";
 import Widget from "./Widget.js";
 import Section from "./Section.js";
 import ProjectFeed from "./ProjectFeed.js";
-import Profile from "./profile";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 function Quora() {
   const [field, setfield] = useState(true)
   return (
@@ -16,12 +15,7 @@ function Quora() {
       <Section field={field} setfield={setfield}/>
       <div className="quora__content">
         <Sidebar />
-        
-        <Switch>
-                <Route path="/" component={field ? Feed:ProjectFeed} exact />
-                <Route path="/profile" component={Profile} />
-            </Switch>
-        
+        {field ? <Feed />:<ProjectFeed/>}
         <Widget />
       </div>
     </div>
