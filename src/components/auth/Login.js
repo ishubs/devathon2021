@@ -7,7 +7,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [LorR, setLorR] = useState(false);
-  const [role, setrole] = useState("")
+  const [role, setrole] = useState("student");
+  const [dept, setdept] = useState("Computer Science");
   const signIn = () => {
     auth.signInWithPopup(provider).catch((e) => {
       alert(e.message);
@@ -32,14 +33,14 @@ function Login() {
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
         if (auth) {
-          console.log(role);
-          console.log(auth.user)
+          // console.log(role);
+          // console.log(auth.user);
           const map = {
             email: email,
-            photourl: auth.user.photoURL
-          }
-          db.collection(role).add(map)
-          
+            photourl: auth.user.photoURL,
+            department: dept
+          };
+          db.collection(role).add(map);
         }
       })
       .catch((e) => alert(e.message));
@@ -91,14 +92,32 @@ function Login() {
           />
         </div>
         <div className="login__inputField">
-          <select value={role} onChange={(e) => {
-            setrole(e.target.value);
-            console.log(role)
-          }}>
-  <option disabled selected >role</option>
-  <option value="student">Student</option>
-  <option value="faculty">Faculty</option>
-</select>
+          <select
+            value={role}
+            onChange={(e) => {
+              setrole(e.target.value);
+            }}
+          >
+            <option disabled selected>
+              role
+            </option>
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+          </select>
+        </div>
+        <div className="login__inputField">
+        <select
+            value={dept}
+            onChange={(e) => {
+              setdept(e.target.value);
+            }}
+          >
+            <option disabled selected>
+              department
+            </option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Mechanical">Mechanical</option>
+          </select>
         </div>
       </div>
 

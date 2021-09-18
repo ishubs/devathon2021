@@ -18,7 +18,7 @@ import firebase from "firebase";
 
 Modal.setAppElement("#root");
 
-function QHeader() {
+function QHeader({field}) {
   const user = useSelector(selectUser);
   const [file, setfile] = useState("");
   const [IsmodalOpen, setIsModalOpen] = useState(false);
@@ -48,6 +48,7 @@ function QHeader() {
 
   const handleFireBaseUpload = (e) => {
     e.preventDefault();
+    setfile(e.target.files[0])
   console.log('start of upload')
   // async magic goes here...
   if(fileHolder === '') {
@@ -88,7 +89,7 @@ function QHeader() {
         <div className="active qHeader__icon">
           <HomeIcon />
         </div>
-        <div className="qHeader__icon">
+        {/* <div className="qHeader__icon">
           <FeaturedPlayListOutlinedIcon />
         </div>
         <div className="qHeader__icon">
@@ -99,7 +100,7 @@ function QHeader() {
         </div>
         <div className="qHeader__icon">
           <NotificationsOutlinedIcon />
-        </div>
+        </div> */}
       </div>
       <div className="qHeader__input">
         <SearchIcon />
@@ -118,7 +119,7 @@ function QHeader() {
           />
         </div>
         <LanguageIcon />
-        <Button onClick={() => setIsModalOpen(true)}>Add Question</Button>
+        <Button onClick={() => setIsModalOpen(true)}>{field ? "Ask Question": "Add Project"}</Button>
         <Modal
           isOpen={IsmodalOpen}
           onRequestClose={() => setIsModalOpen(false)}
@@ -175,7 +176,7 @@ function QHeader() {
             <div className="modal__fieldLink">
               <Link />
               <input type="file" onChange={(e) => {
-                setfile(e.target.files[0])
+                
                 handleFireBaseUpload(e);
               }}></input>
             </div>
@@ -185,7 +186,7 @@ function QHeader() {
               Cancel
             </button>
             <button type="sumbit" onClick={handleQuestion} className="add">
-              Add Question
+              {field ? "Add Question": "Add a Project"}
             </button>
           </div>
         </Modal>

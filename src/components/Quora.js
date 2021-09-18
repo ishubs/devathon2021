@@ -11,7 +11,7 @@ function Quora() {
   const [field, setfield] = useState(true)
   return (
     <div className="quora">
-      <QHeader />
+      <QHeader field={ field} />
       <Section field={field} setfield={setfield}/>
       <div className="quora__content">
         <Sidebar />

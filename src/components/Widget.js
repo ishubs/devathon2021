@@ -37,7 +37,8 @@ const [faculty, setfaculty] = useState([])
       <div className="widget__contents">
         {/* <WidgetContent /> */}
         {faculty.map(i => (
-          <p>{i.email}</p>)
+          <WidgetContent user={i} />
+        )
         )}
       </div>
     </div>

@@ -21,7 +21,7 @@ export default function QuorBox({field}) {
         <h5>{user.displayName ? user.displayName : user.email}</h5>
       </div>
       <div className="quoraBox__quora">
-        <p>{(field=="project")? "What is your Project or link?":"questins"}</p>
+        <p>{(field=="project")? "Post Your Project Here":"Ask a Question"}</p>
       </div>
     </div>
   );
