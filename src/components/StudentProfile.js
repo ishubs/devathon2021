@@ -4,12 +4,10 @@ import db from "../firebase";
 import Channel from "./Channel";
 function Profile() {
     let { id } = useParams()
-    console.log("this is id" + id)
     const [user, setuser] = useState({})
-    const email1 = user.email
     useEffect(() => {
        
-            db.collection("faculty").where('email', '==', id).get()
+            db.collection("student").where('email', '==', id).get()
               .then((querySnapshot) => {
                      
               querySnapshot.forEach(element => {

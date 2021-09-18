@@ -12,6 +12,7 @@ import Modal from "react-modal";
 import db from "../firebase";
 import { selectQuestionId, setQuestionInfo } from "../features/questionSlice";
 import firebase from "firebase";
+import { Link } from "react-router-dom"
 function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -20,8 +21,7 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
   const questionId = useSelector(selectQuestionId);
   const [answer, setAnswer] = useState("");
   const [getAnswers, setGetAnswers] = useState([]);
-
-
+ 
   useEffect(() => {
     if (questionId) {
       db.collection(field)
@@ -93,7 +93,7 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
               : "https://images-platform.99static.com//_QXV_u2KU7-ihGjWZVHQb5d-yVM=/238x1326:821x1909/fit-in/500x500/99designs-contests-attachments/119/119362/attachment_119362573"
           }
         />
-        <h4>{users.displayName ? users.displayName : users.email}</h4>
+         <Link to={`profile/student/`+users.email}><h4>{users.displayName ? users.displayName : users.email}</h4></Link>
         <small>{new Date(timestamp?.toDate()).toLocaleString()}</small>
       </div>
       <div className="post__body">
