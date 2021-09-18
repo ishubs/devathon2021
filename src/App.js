@@ -5,7 +5,7 @@ import Login from "./components/auth/Login";
 import Quora from "./components/Quora";
 import { login, logout, selectUser } from "./features/userSlice";
 import { auth } from "./firebase";
-
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 function App() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();

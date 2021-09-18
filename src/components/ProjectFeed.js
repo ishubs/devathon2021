@@ -23,7 +23,7 @@ function Feed() {
   console.log(posts)
   return (
     <div className="feed">
-      <QuorBox field={"feed"}/>
+          <QuorBox field={"project"}/>
       {posts.map(({ id, questions }) => (
         <Post
           key={id}

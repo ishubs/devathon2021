@@ -34,9 +34,6 @@ function Login() {
         if (auth) {
           console.log(role);
           console.log(auth.user)
-          db.collection(role).add({
-            user: JSON.stringify(auth.user)
-          })
           const map = {
             email: email,
             photourl: auth.user.photoURL

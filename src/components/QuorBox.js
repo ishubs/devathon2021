@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import "./QuoraBox.css";
 
-export default function QuorBox() {
+export default function QuorBox({field}) {
   const user = useSelector(selectUser);
 
   return (
@@ -21,7 +21,7 @@ export default function QuorBox() {
         <h5>{user.displayName ? user.displayName : user.email}</h5>
       </div>
       <div className="quoraBox__quora">
-        <p>What is your question or link?</p>
+        <p>{(field=="project")? "What is your Project or link?":"questins"}</p>
       </div>
     </div>
   );
