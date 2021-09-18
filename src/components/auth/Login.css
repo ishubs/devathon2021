@@ -97,12 +97,12 @@
   justify-content: center;
   padding: 20px;
   flex: 0.5;
-  /* margin-left: 20px; */
-  /* border: 1px solid; */
+  margin-left: 20px;
 }
 
 .login__label  {
   display: flex;
+
 }
 
 .login__label > h4 {
@@ -114,18 +114,7 @@
 .login__label > h4:hover {
   cursor: pointer;
 }
-.login__label > button {
-  padding: 20px 57px;
-  /* border-radius: 5px; */
-  border: 1px solid #189AB4;
-  outline: 1px;
-  background-color: whitesmoke;
-  color: grey;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
-  /* margin-top: 10px; */
-}
+
 .login__inputFields {
   display: flex;
   flex-direction: column;
@@ -133,7 +122,7 @@
 }
 
 .login__inputField {
-  padding: 10px;
+  padding: 5px;
 }
 
 .login__inputField > input {
@@ -166,7 +155,7 @@
   border-radius: 5px;
   border: none;
   outline: none;
-  background-color: #00c2cb;
+  background-color: blue;
   color: white;
   font-weight: bold;
   font-size: 15px;
@@ -178,14 +167,13 @@
   border-radius: 5px;
   border: none;
   outline: none;
-  background-color: #00c2cb;
+  background-color: blue;
   color: white;
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
   margin-top: 10px;
 }
-
 
 .login__lang {
   display: flex;
