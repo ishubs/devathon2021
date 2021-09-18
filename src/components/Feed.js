@@ -34,6 +34,7 @@ function Feed() {
           users={questions.user}
           file={questions.file == undefined ? "" : questions.file}
           upvote={questions.upvote}
+          field={"questions"}
         />
       ))}
     </div>

@@ -21,13 +21,15 @@ Modal.setAppElement("#root");
 function QHeader({field}) {
   const user = useSelector(selectUser);
   const allInputs = {imgUrl: ''}
-  const [imageAsFile, setImageAsFile] = useState("");
-  const [imageAsUrl, setImageAsUrl] = useState(allInputs);
+  // const [imageAsFile, setImageAsFile] = useState("");
+  // const [imageAsUrl, setImageAsUrl] = useState(allInputs);
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const [input, setInput] = useState("");
   const [inputUrl, setInputUrl] = useState("");
-  const [fileHolder, setfileHolder] = useState("");
-  const [uploading, setuploading] = useState(false)
+  const [file, setFile] = useState(null);
+  const [url, setURL] = useState("")
+  // const [fileHolder, setfileHolder] = useState("");
+  // const [uploading, setuploading] = useState(false)
   const questionName = input;
 
   const handleQuestion = (e) => {
@@ -40,45 +42,65 @@ function QHeader({field}) {
         imageUrl: inputUrl,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       //  file: storage.ref(`/files/${fileHolder.name}`).put(fileHolder)
-        file: imageAsUrl.imgUrl,
+        file: url,
         upvote:[]
       });
     }
   };
 
-console.log(imageAsFile)
-  const handleImageAsFile = (e) => {
-    const image = e.target.files[0]
-    setImageAsFile(imageFile => (image))
+// // console.log(imageAsFile)
+//   const handleImageAsFile = (e) => {
+//     const image = e.target.files[0]
+//     setImageAsFile(imageFile => (image))
+// }
+  
+// function handleChange(e) {
+//   setFile(e.target.files[0]);
+// }
+console.log(url)
+async function handleFireBaseUpload(e) {
+  e.preventDefault();
+  let file = e.target.files[0]
+  console.log(file.name)
+  const ref = storage.ref(`/files/${file.name}`);
+  const uploadTask = ref.put(file);
+  uploadTask.on("state_changed", console.log, console.error, () => {
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        setFile(null);
+        setURL(url);
+      });
+  });
 }
-
-  const handleFireBaseUpload = async (e) => {
+  
+  // const handleFireBaseUpload = async (e) => {
     
-  console.log('start of upload')
-  // async magic goes here...
-  if(imageAsFile === '') {
-    console.error(`not an image, the image file is a ${typeof(file)}`)
-    }
+  // console.log('start of upload')
+  // // async magic goes here...
+  // if(imageAsFile === '') {
+  //   console.error(`not an image, the image file is a ${typeof(file)}`)
+  //   }
     
-  const uploadTask = storage.ref(`/files/${imageAsFile.name}`).put(imageAsFile)
-  //initiates the firebase side uploading 
-  uploadTask.on('state_changed', 
-  (snapShot) => {
-    //takes a snap shot of the process as it is happening
-    console.log(snapShot)
-  }, (err) => {
-    //catches the errors
-    console.log(err)
-  }, () => {
-    // gets the functions from storage refences the image storage in firebase by the children
-    // gets the download url then sets the image from firebase as the value for the imgUrl key:
-    storage.ref('files').child(imageAsFile.name).getDownloadURL()
-     .then(fireBaseUrl => {
-       setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
-     })
-    console.log(imageAsUrl.imgUrl)
-  })
-  }
+  // const uploadTask = storage.ref(`/files/${imageAsFile.name}`).put(imageAsFile)
+  // //initiates the firebase side uploading 
+  // uploadTask.on('state_changed', 
+  // (snapShot) => {
+  //   //takes a snap shot of the process as it is happening
+  //   console.log(snapShot)
+  // }, (err) => {
+  //   //catches the errors
+  //   console.log(err)
+  // }, () => {
+  //   // gets the functions from storage refences the image storage in firebase by the children
+  //   // gets the download url then sets the image from firebase as the value for the imgUrl key:
+  //   storage.ref('files').child(imageAsFile.name).getDownloadURL()
+  //    .then(fireBaseUrl => {
+  //      setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
+  //    })
+  //   console.log(imageAsUrl.imgUrl)
+  // })
+  // }
 
 
   
@@ -182,7 +204,7 @@ console.log(imageAsFile)
             <div className="modal__fieldLink">
               <Link />
               <input type="file" onChange={
-                handleImageAsFile
+                handleFireBaseUpload
               }></input>
             </div>
           </div>
@@ -190,7 +212,7 @@ console.log(imageAsFile)
             <button className="cancle" onClick={() => setIsModalOpen(false)}>
               Cancel
             </button>
-            <button type="sumbit" onClick={(e) => { handleFireBaseUpload(e).then(handleQuestion(e)) }} className="add" >
+            <button type="sumbit" onClick={(e) => (handleQuestion(e)) } className="add" >
               {field=="questions" ? "Add Question": "Add a Project"}
             </button>
           </div>

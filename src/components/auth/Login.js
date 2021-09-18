@@ -33,11 +33,18 @@ function Login() {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
+     
+           auth.user.updateProfile({
+            displayName: name
+          })
+       
         if (auth) {
           // console.log(role);
-          // console.log(auth.user);
+          console.log(auth.user.displayName);
+         
           const map = {
-            displayName:name,
+            
+            
             email: email,
             photourl: auth.user.photoURL,
             department: dept

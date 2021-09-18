@@ -12,10 +12,10 @@ import Modal from "react-modal";
 import db from "../firebase";
 import { selectQuestionId, setQuestionInfo } from "../features/questionSlice";
 import firebase from "firebase";
-function Post({ Id, question, imageUrl, timestamp, users, file, upvote}) {
+function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-console.log(file)
+// console.log(file)
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const questionId = useSelector(selectQuestionId);
   const [answer, setAnswer] = useState("");
@@ -24,7 +24,7 @@ console.log(file)
 
   useEffect(() => {
     if (questionId) {
-      db.collection("questions")
+      db.collection(field)
         .doc(questionId)
         .collection("answer")
         .orderBy("timestamp", "desc")
@@ -40,7 +40,7 @@ console.log(file)
   const handleupvote = (e) => {
     e.preventDefault();
     if (questionId) {
-      db.collection("questions").doc(questionId).update({
+      db.collection(field).doc(questionId).update({
         upvote: firebase.firestore.FieldValue.arrayUnion(user)
       }
       )
@@ -62,7 +62,7 @@ console.log(file)
     e.preventDefault();
     
     if (questionId) {
-      db.collection("questions").doc(questionId).collection("answer").add({
+      db.collection(field).doc(questionId).collection("answer").add({
         user: user,
         answer: answer,
         questionId: questionId,
@@ -154,10 +154,10 @@ console.log(file)
             </div>
           </Modal>
         </div>
-        <div><a href={file} >{ file}</a></div>
+        <div><a target="_blank" href={file} >{ field=="questions"? "File":"Project File"}</a></div>
         <div className="post__answer">
           {getAnswers.map(({ id, answers }) => (
-            <p key={id} style={{ position: "relative", paddingBottom: "5px" }}>
+            <p key={id} style={{ position: "relative", paddingBottom: "5px" , border:"black"}}>
               {Id === answers.questionId ? (
                 <span>
                   {answers.answer}
@@ -174,7 +174,7 @@ console.log(file)
                     <span style={{ color: "#b92b27" }}>
                       {answers.user.displayName
                         ? answers.user.displayName
-                        : answers.user.email}{" "}
+                        : answers.user.name}{" "}
                       on{" "}
                       {new Date(answers.timestamp?.toDate()).toLocaleString()}
                     </span>
@@ -193,8 +193,8 @@ console.log(file)
           <ArrowUpwardOutlinedIcon onClick={(e)=>handleupvote(e)} />{upvote==undefined? 0: upvote.length}
         </div>
 
-        <RepeatOutlinedIcon />
-        <ChatBubbleOutlineOutlinedIcon />
+        {/* <RepeatOutlinedIcon />
+        <ChatBubbleOutlineOutlinedIcon /> */}
         <div className="post__footerLeft">
           <ShareOutlined />
           <MoreHorizOutlined />

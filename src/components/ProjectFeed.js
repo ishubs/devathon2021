@@ -32,7 +32,8 @@ function Feed() {
           imageUrl={questions.imageUrl}
           timestamp={questions.timestamp}
           users={questions.user}
-          file={questions.file == undefined ? "" : questions.file.fileHolder}
+        file={questions.file == undefined ? "" : questions.file}
+        field={"projects"}
           upvote={questions.upvote}
         />
       ))}
