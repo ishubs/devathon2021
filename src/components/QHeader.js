@@ -46,8 +46,8 @@ function QHeader() {
     setInputUrl("");
   };
 
-  const handleFireBaseUpload = () => {
-    
+  const handleFireBaseUpload = (e) => {
+    e.preventDefault();
   console.log('start of upload')
   // async magic goes here...
   if(fileHolder === '') {
@@ -176,7 +176,7 @@ function QHeader() {
               <Link />
               <input type="file" onChange={(e) => {
                 setfile(e.target.files[0])
-                handleFireBaseUpload();
+                handleFireBaseUpload(e);
               }}></input>
             </div>
           </div>
