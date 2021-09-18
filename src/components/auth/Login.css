@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: url("http://qsfs.fs.quoracdn.net/-4-images.home.illo_1920.png-26-e9e6fbe02d908942.png");
+  background-color: #00c2cb;
 }
 
 .login__container {
@@ -43,7 +43,9 @@
 }
 
 .login__auth {
-  display: flex;
+  display: block;
+  width: 50%;
+  align-self: center;
   margin-top: 50px;
 }
 
@@ -98,8 +100,19 @@
   margin-left: 20px;
 }
 
+.login__label  {
+  display: flex;
+  
+}
+
 .login__label > h4 {
   padding: 5px;
+  text-align: center;
+  
+}
+
+.login__label > h4:hover {
+  cursor: pointer;
 }
 
 .login__inputFields {

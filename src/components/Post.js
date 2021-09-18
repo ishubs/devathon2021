@@ -5,15 +5,14 @@ import ArrowUpwardOutlinedIcon from "@material-ui/icons/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@material-ui/icons/ArrowDownwardOutlined";
 import RepeatOutlinedIcon from "@material-ui/icons/RepeatOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
-import { MoreHorizOutlined, ShareOutlined } from "@material-ui/icons";
+import { MoreHorizOutlined, ShareOutlined, Update } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import Modal from "react-modal";
 import db from "../firebase";
 import { selectQuestionId, setQuestionInfo } from "../features/questionSlice";
 import firebase from "firebase";
-
-function Post({ Id, question, imageUrl, timestamp, users }) {
+function Post({ Id, question, imageUrl, timestamp, users, file, upvote}) {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
@@ -21,6 +20,7 @@ function Post({ Id, question, imageUrl, timestamp, users }) {
   const questionId = useSelector(selectQuestionId);
   const [answer, setAnswer] = useState("");
   const [getAnswers, setGetAnswers] = useState([]);
+
 
   useEffect(() => {
     if (questionId) {
@@ -36,9 +36,32 @@ function Post({ Id, question, imageUrl, timestamp, users }) {
     }
   }, [questionId]);
 
+
+  const handleupvote = (e) => {
+    e.preventDefault();
+   
+    if (questionId) {
+      db.collection("questions").doc(questionId).update({
+        upvote: firebase.firestore.FieldValue.arrayUnion(user)
+      }
+      )
+    }
+
+    // db.collection("questions").doc(questionId).collection("upvote").doc(user).delete({
+    //   user: user,
+    //   upvote: true,
+    //   questionId: questionId,
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    // });
+
+    console.log(questionId);
+    setAnswer("");
+    setIsModalOpen(false);
+  };
+
   const handleAnswer = (e) => {
     e.preventDefault();
-
+    
     if (questionId) {
       db.collection("questions").doc(questionId).collection("answer").add({
         user: user,
@@ -76,7 +99,7 @@ function Post({ Id, question, imageUrl, timestamp, users }) {
       </div>
       <div className="post__body">
         <div className="post__question">
-          <p>{question}</p>
+          <h3>{question}</h3>
           <button
             onClick={() => setIsModalOpen(true)}
             className="post__btnAnswer"
@@ -132,6 +155,7 @@ function Post({ Id, question, imageUrl, timestamp, users }) {
             </div>
           </Modal>
         </div>
+        <div><a href={file} >{ file}</a></div>
         <div className="post__answer">
           {getAnswers.map(({ id, answers }) => (
             <p key={id} style={{ position: "relative", paddingBottom: "5px" }}>
@@ -167,8 +191,7 @@ function Post({ Id, question, imageUrl, timestamp, users }) {
       </div>
       <div className="post__footer">
         <div className="post__footerAction">
-          <ArrowUpwardOutlinedIcon />
-          <ArrowDownwardOutlinedIcon />
+          <ArrowUpwardOutlinedIcon onClick={handleupvote} />{upvote==undefined? 0: upvote.length}
         </div>
 
         <RepeatOutlinedIcon />

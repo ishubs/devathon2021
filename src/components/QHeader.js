@@ -12,7 +12,7 @@ import "./QHeader.css";
 import { Avatar, Button, Input } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
-import db, { auth } from "../firebase";
+import db, { auth, storage } from "../firebase";
 import { ExpandMore, Link } from "@material-ui/icons";
 import firebase from "firebase";
 
@@ -20,22 +20,25 @@ Modal.setAppElement("#root");
 
 function QHeader() {
   const user = useSelector(selectUser);
-
+  const [file, setfile] = useState("");
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const [input, setInput] = useState("");
   const [inputUrl, setInputUrl] = useState("");
+  const [fileHolder, setfileHolder] = useState("");
   const questionName = input;
 
   const handleQuestion = (e) => {
     e.preventDefault();
     setIsModalOpen(false);
-
     if (questionName) {
       db.collection("questions").add({
         user: user,
         question: input,
         imageUrl: inputUrl,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      //  file: storage.ref(`/files/${fileHolder.name}`).put(fileHolder)
+        file: fileHolder,
+        upvote:[]
       });
     }
 
@@ -43,11 +46,41 @@ function QHeader() {
     setInputUrl("");
   };
 
+  const handleFireBaseUpload = () => {
+    
+  console.log('start of upload')
+  // async magic goes here...
+  if(fileHolder === '') {
+    console.error(`not an image, the image file is a ${typeof(fileHolder)}`)
+  }
+  const uploadTask = storage.ref(`/files/${file.name}`).put(file)
+  //initiates the firebase side uploading 
+  uploadTask.on('state_changed', 
+  (snapShot) => {
+    //takes a snap shot of the process as it is happening
+    console.log(snapShot)
+  }, (err) => {
+    //catches the errors
+    
+    console.log("this is the errorrrrr"+err)
+  }, () => {
+    // gets the functions from storage refences the image storage in firebase by the children
+    // gets the download url then sets the image from firebase as the value for the imgUrl key:
+    storage.ref('files').child(file.name).getDownloadURL()
+     .then(fireBaseUrl => {
+       setfileHolder(prevObject => ({...prevObject, fileHolder: fireBaseUrl}))
+     })
+  })
+  }
+
+
+  
+
   return (
     <div className="qHeader">
       <div className="qHeader__logo">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Quora_logo_2015.svg/250px-Quora_logo_2015.svg.png"
+          src="logo.png"
           alt=""
         />
       </div>
@@ -138,6 +171,13 @@ function QHeader() {
                 type="text"
                 placeholder="Optional: inclue a link that gives context"
               ></input>
+            </div>
+            <div className="modal__fieldLink">
+              <Link />
+              <input type="file" onChange={(e) => {
+                setfile(e.target.files[0])
+                handleFireBaseUpload();
+              }}></input>
             </div>
           </div>
           <div className="modal__buttons">
