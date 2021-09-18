@@ -15,7 +15,7 @@ import firebase from "firebase";
 function Post({ Id, question, imageUrl, timestamp, users, file, upvote}) {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-
+console.log(file)
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const questionId = useSelector(selectQuestionId);
   const [answer, setAnswer] = useState("");
@@ -39,7 +39,6 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote}) {
 
   const handleupvote = (e) => {
     e.preventDefault();
-   
     if (questionId) {
       db.collection("questions").doc(questionId).update({
         upvote: firebase.firestore.FieldValue.arrayUnion(user)
@@ -54,9 +53,9 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote}) {
     //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     // });
 
-    console.log(questionId);
-    setAnswer("");
-    setIsModalOpen(false);
+    // console.log(questionId);
+    // setAnswer("");
+    // setIsModalOpen(false);
   };
 
   const handleAnswer = (e) => {
@@ -191,7 +190,7 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote}) {
       </div>
       <div className="post__footer">
         <div className="post__footerAction">
-          <ArrowUpwardOutlinedIcon onClick={handleupvote} />{upvote==undefined? 0: upvote.length}
+          <ArrowUpwardOutlinedIcon onClick={(e)=>handleupvote(e)} />{upvote==undefined? 0: upvote.length}
         </div>
 
         <RepeatOutlinedIcon />

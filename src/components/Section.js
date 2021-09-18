@@ -9,8 +9,8 @@ import Section from "./Section.js";
 function Quora({setfield,field}) {
   return (
     <div>
-          <button onClick={()=>setfield(false)}>Projects</button>
-          <button onClick={()=>setfield(true)}>Questions</button>
+          <button onClick={()=>setfield("projects")}>Projects</button>
+          <button onClick={()=>setfield("questions")}>Questions</button>
     </div>
   );
 }

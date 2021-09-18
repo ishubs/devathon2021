@@ -20,41 +20,47 @@ Modal.setAppElement("#root");
 
 function QHeader({field}) {
   const user = useSelector(selectUser);
-  const [file, setfile] = useState("");
+  const allInputs = {imgUrl: ''}
+  const [imageAsFile, setImageAsFile] = useState("");
+  const [imageAsUrl, setImageAsUrl] = useState(allInputs);
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const [input, setInput] = useState("");
   const [inputUrl, setInputUrl] = useState("");
   const [fileHolder, setfileHolder] = useState("");
+  const [uploading, setuploading] = useState(false)
   const questionName = input;
 
   const handleQuestion = (e) => {
     e.preventDefault();
     setIsModalOpen(false);
     if (questionName) {
-      db.collection("questions").add({
+      db.collection(field).add({
         user: user,
         question: input,
         imageUrl: inputUrl,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       //  file: storage.ref(`/files/${fileHolder.name}`).put(fileHolder)
-        file: fileHolder,
+        file: imageAsUrl.imgUrl,
         upvote:[]
       });
     }
-
-    setInput("");
-    setInputUrl("");
   };
 
-  const handleFireBaseUpload = (e) => {
-    e.preventDefault();
-    setfile(e.target.files[0])
+console.log(imageAsFile)
+  const handleImageAsFile = (e) => {
+    const image = e.target.files[0]
+    setImageAsFile(imageFile => (image))
+}
+
+  const handleFireBaseUpload = async (e) => {
+    
   console.log('start of upload')
   // async magic goes here...
-  if(fileHolder === '') {
-    console.error(`not an image, the image file is a ${typeof(fileHolder)}`)
-  }
-  const uploadTask = storage.ref(`/files/${file.name}`).put(file)
+  if(imageAsFile === '') {
+    console.error(`not an image, the image file is a ${typeof(file)}`)
+    }
+    
+  const uploadTask = storage.ref(`/files/${imageAsFile.name}`).put(imageAsFile)
   //initiates the firebase side uploading 
   uploadTask.on('state_changed', 
   (snapShot) => {
@@ -62,15 +68,15 @@ function QHeader({field}) {
     console.log(snapShot)
   }, (err) => {
     //catches the errors
-    
-    console.log("this is the errorrrrr"+err)
+    console.log(err)
   }, () => {
     // gets the functions from storage refences the image storage in firebase by the children
     // gets the download url then sets the image from firebase as the value for the imgUrl key:
-    storage.ref('files').child(file.name).getDownloadURL()
+    storage.ref('files').child(imageAsFile.name).getDownloadURL()
      .then(fireBaseUrl => {
-       setfileHolder(prevObject => ({...prevObject, fileHolder: fireBaseUrl}))
+       setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
      })
+    console.log(imageAsUrl.imgUrl)
   })
   }
 
@@ -104,7 +110,7 @@ function QHeader({field}) {
       </div>
       <div className="qHeader__input">
         <SearchIcon />
-        <input type="text" placeholder="Search Quora" />
+        <input type="text" placeholder="Search Discussly" />
       </div>
       <div className="qHeader__Rem">
         <div className="qHeader__avatar">
@@ -119,7 +125,7 @@ function QHeader({field}) {
           />
         </div>
         <LanguageIcon />
-        <Button onClick={() => setIsModalOpen(true)}>{field ? "Ask Question": "Add Project"}</Button>
+        <Button onClick={() => setIsModalOpen(true)}>{field=="questions" ? "Ask Question": "Add Project"}</Button>
         <Modal
           isOpen={IsmodalOpen}
           onRequestClose={() => setIsModalOpen(false)}
@@ -175,18 +181,17 @@ function QHeader({field}) {
             </div>
             <div className="modal__fieldLink">
               <Link />
-              <input type="file" onChange={(e) => {
-                
-                handleFireBaseUpload(e);
-              }}></input>
+              <input type="file" onChange={
+                handleImageAsFile
+              }></input>
             </div>
           </div>
           <div className="modal__buttons">
             <button className="cancle" onClick={() => setIsModalOpen(false)}>
               Cancel
             </button>
-            <button type="sumbit" onClick={handleQuestion} className="add">
-              {field ? "Add Question": "Add a Project"}
+            <button type="sumbit" onClick={(e) => { handleFireBaseUpload(e).then(handleQuestion(e)) }} className="add" >
+              {field=="questions" ? "Add Question": "Add a Project"}
             </button>
           </div>
         </Modal>

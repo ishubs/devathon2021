@@ -1,6 +1,6 @@
 import React from "react";
 import "./WidgetContent.css";
-
+import {Link} from "react-router-dom"
 function WidgetContent({user}) {
   return (
     <div className="widget__contents">
@@ -10,7 +10,7 @@ function WidgetContent({user}) {
           alt=""
         />
         <div className="widget__contentTitle">
-          <h5>{ user.email}</h5>
+          <Link to={`profile/`+user.email}><h5>{ user.email}</h5></Link>
           <p>The best Mobile App Development Company</p>
         </div>
       </div>

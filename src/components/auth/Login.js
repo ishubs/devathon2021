@@ -9,6 +9,7 @@ function Login() {
   const [LorR, setLorR] = useState(false);
   const [role, setrole] = useState("student");
   const [dept, setdept] = useState("Computer Science");
+  const [name, setname] = useState("")
   const signIn = () => {
     auth.signInWithPopup(provider).catch((e) => {
       alert(e.message);
@@ -36,6 +37,7 @@ function Login() {
           // console.log(role);
           // console.log(auth.user);
           const map = {
+            displayName:name,
             email: email,
             photourl: auth.user.photoURL,
             department: dept
@@ -75,6 +77,14 @@ function Login() {
   const registercomponent = (
     <div className="login__emailPass">
       <div className="login__inputFields">
+      <div className="login__inputField">
+          <input
+            value={name}
+            onChange={(e) => setname(e.target.value)}
+            type="text"
+            placeholder="Name"
+          />
+        </div>
         <div className="login__inputField">
           <input
             value={email}
@@ -138,14 +148,14 @@ function Login() {
         </div>
         <div className="login__auth">
           <div className="login__label">
-            <button
+            <button style={LorR?{}:{background:"#189AB4",color:"white"}}
               onClick={() => {
                 setLorR(false);
               }}
             >
               Login
             </button>
-            <button
+            <button style={LorR ? { background: "#189AB4", color:"white" }: {} }
               onClick={() => {
                 setLorR(true);
               }}

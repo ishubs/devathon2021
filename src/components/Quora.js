@@ -8,14 +8,14 @@ import Section from "./Section.js";
 import ProjectFeed from "./ProjectFeed.js";
 
 function Quora() {
-  const [field, setfield] = useState(true)
+  const [field, setfield] = useState("questions")
   return (
     <div className="quora">
       <QHeader field={ field} />
       <Section field={field} setfield={setfield}/>
       <div className="quora__content">
         <Sidebar />
-        {field ? <Feed />:<ProjectFeed/>}
+        {field=="questions" ? <Feed />:<ProjectFeed/>}
         <Widget />
       </div>
     </div>

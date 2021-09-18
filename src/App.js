@@ -33,7 +33,7 @@ function App() {
       {user ? (
         <switch>
           <Route path="/" component={Quora} exact />
-          <Route path="/profile" component={Profile} exact />
+          <Route path="/profile/:id" component={Profile} exact />
 
         </switch>
       ) : (
