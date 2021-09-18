@@ -35,8 +35,14 @@ function Login() {
           console.log(role);
           console.log(auth.user)
           db.collection(role).add({
-            user: auth.user}
-          )
+            user: JSON.stringify(auth.user)
+          })
+          const map = {
+            email: email,
+            photourl: auth.user.photoURL
+          }
+          db.collection(role).add(map)
+          
         }
       })
       .catch((e) => alert(e.message));
