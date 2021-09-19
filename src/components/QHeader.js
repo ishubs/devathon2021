@@ -7,13 +7,13 @@ import NotificationsOutlinedIcon from "@material-ui/icons/NotificationsOutlined"
 import SearchIcon from "@material-ui/icons/Search";
 import LanguageIcon from "@material-ui/icons/Language";
 import Modal from "react-modal";
-
+import {Link} from "react-router-dom"
 import "./QHeader.css";
 import { Avatar, Button, Input } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import db, { auth, storage } from "../firebase";
-import { ExpandMore, Link } from "@material-ui/icons";
+import { ExpandMore } from "@material-ui/icons";
 import firebase from "firebase";
 
 Modal.setAppElement("#root");
@@ -29,7 +29,7 @@ function QHeader({field}) {
   const [file, setFile] = useState(null);
   const [url, setURL] = useState("")
   // const [fileHolder, setfileHolder] = useState("");
-  // const [uploading, setuploading] = useState(false)
+  const [uploading, setuploading] = useState(false)
   const questionName = input;
 
   const handleQuestion = (e) => {
@@ -38,6 +38,7 @@ function QHeader({field}) {
     if (questionName) {
       db.collection(field).add({
         user: user,
+        email:user.email,
         question: input,
         imageUrl: inputUrl,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -48,17 +49,10 @@ function QHeader({field}) {
     }
   };
 
-// // console.log(imageAsFile)
-//   const handleImageAsFile = (e) => {
-//     const image = e.target.files[0]
-//     setImageAsFile(imageFile => (image))
-// }
-  
-// function handleChange(e) {
-//   setFile(e.target.files[0]);
-// }
+
 console.log(url)
-async function handleFireBaseUpload(e) {
+  async function handleFireBaseUpload(e) {
+  setuploading(true)
   e.preventDefault();
   let file = e.target.files[0]
   console.log(file.name)
@@ -70,65 +64,31 @@ async function handleFireBaseUpload(e) {
       .then((url) => {
         setFile(null);
         setURL(url);
+        setuploading(false)
       });
   });
 }
   
-  // const handleFireBaseUpload = async (e) => {
-    
-  // console.log('start of upload')
-  // // async magic goes here...
-  // if(imageAsFile === '') {
-  //   console.error(`not an image, the image file is a ${typeof(file)}`)
-  //   }
-    
-  // const uploadTask = storage.ref(`/files/${imageAsFile.name}`).put(imageAsFile)
-  // //initiates the firebase side uploading 
-  // uploadTask.on('state_changed', 
-  // (snapShot) => {
-  //   //takes a snap shot of the process as it is happening
-  //   console.log(snapShot)
-  // }, (err) => {
-  //   //catches the errors
-  //   console.log(err)
-  // }, () => {
-  //   // gets the functions from storage refences the image storage in firebase by the children
-  //   // gets the download url then sets the image from firebase as the value for the imgUrl key:
-  //   storage.ref('files').child(imageAsFile.name).getDownloadURL()
-  //    .then(fireBaseUrl => {
-  //      setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
-  //    })
-  //   console.log(imageAsUrl.imgUrl)
-  // })
-  // }
 
 
   
 
   return (
     <div className="qHeader">
+      <Link to="/">
       <div className="qHeader__logo">
         <img
-          src="logo.png"
+          src="https://firebasestorage.googleapis.com/v0/b/devathon-952a0.appspot.com/o/files%2Flogo.png?alt=media&token=35db4ac8-6e7e-4198-99e7-51dda808dc8c"
           alt=""
         />
-      </div>
+      </div></Link>
       <div className="qHeader__icons">
+      
         <div className="active qHeader__icon">
-          <HomeIcon />
+          
+          {/* <HomeIcon /> */}
         </div>
-        {/* <div className="qHeader__icon">
-          <FeaturedPlayListOutlinedIcon />
-        </div>
-        <div className="qHeader__icon">
-          <AssignmentTurnedInOutlinedIcon />
-        </div>
-        <div className="qHeader__icon">
-          <PeopleAltOutlinedIcon />
-        </div>
-        <div className="qHeader__icon">
-          <NotificationsOutlinedIcon />
-        </div> */}
+       
       </div>
       <div className="qHeader__input">
         <SearchIcon />
@@ -146,7 +106,7 @@ async function handleFireBaseUpload(e) {
             }
           />
         </div>
-        <LanguageIcon />
+        {/* <LanguageIcon /> */}
         <Button onClick={() => setIsModalOpen(true)}>{field=="questions" ? "Ask Question": "Add Project"}</Button>
         <Modal
           isOpen={IsmodalOpen}
@@ -190,7 +150,7 @@ async function handleFireBaseUpload(e) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               type="text"
-              placeholder="Start your question with 'What', 'How', 'Why', etc. "
+              placeholder="Ask your Question here"
             />
             <div className="modal__fieldLink">
               <Link />
@@ -202,11 +162,15 @@ async function handleFireBaseUpload(e) {
               ></input>
             </div>
             <div className="modal__fieldLink">
+              <p style={{color:"red"}}>{uploading? "Your file is uploading...": "" }</p>
+            </div>
+            <div className="modal__fieldLink">
               <Link />
               <input type="file" onChange={
                 handleFireBaseUpload
               }></input>
             </div>
+            
           </div>
           <div className="modal__buttons">
             <button className="cancle" onClick={() => setIsModalOpen(false)}>

@@ -21,7 +21,6 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
   const questionId = useSelector(selectQuestionId);
   const [answer, setAnswer] = useState("");
   const [getAnswers, setGetAnswers] = useState([]);
- 
   useEffect(() => {
     if (questionId) {
       db.collection(field)
@@ -32,7 +31,8 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
           setGetAnswers(
             snapshot.docs.map((doc) => ({ id: doc.id, answers: doc.data() }))
           )
-        );
+      );
+      
     }
   }, [questionId]);
 
@@ -93,7 +93,7 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
               : "https://images-platform.99static.com//_QXV_u2KU7-ihGjWZVHQb5d-yVM=/238x1326:821x1909/fit-in/500x500/99designs-contests-attachments/119/119362/attachment_119362573"
           }
         />
-         <Link to={`profile/student/`+users.email}><h4>{users.displayName ? users.displayName : users.email}</h4></Link>
+         <Link to={`profile/student/`+users.email}><h4 style={{paddingLeft:"15%"}}>{users.displayName ? users.displayName : users.email.split("@")[0]}</h4></Link>
         <small>{new Date(timestamp?.toDate()).toLocaleString()}</small>
       </div>
       <div className="post__body">
@@ -125,9 +125,9 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
             <div className="modal__question">
               <h1>{question}</h1>
               <p>
-                asked by{" "}
+              {field=="questions"? "asked by":"Proposed By"}{" "}
                 <span className="name">
-                  {users.displayName ? users.displayName : users.email}
+                  {users.displayName ? users.displayName :users.email}
                 </span>{" "}
                 {""}
                 on{" "}
@@ -154,7 +154,8 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
             </div>
           </Modal>
         </div>
-        <div><a target="_blank" href={file} >{ field=="questions"? "File":"Project File"}</a></div>
+        
+       {file && <div><a target="_blank" href={file} >{ field=="questions"? "File":"Project File"}</a></div>}
         <div className="post__answer">
           {getAnswers.map(({ id, answers }) => (
             <p key={id} style={{ position: "relative", paddingBottom: "5px" , border:"black"}}>

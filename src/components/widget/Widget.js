@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./Widget.css";
 import WidgetContent from "./WidgetContent";
-import db, { auth, provider } from "../firebase";
+import db from "../../firebase";
 function Widget() {
 const [faculty, setfaculty] = useState([])
   // useEffect(() => {

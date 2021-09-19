@@ -37,7 +37,7 @@
 .qHeader__icon > .MuiSvgIcon-root:hover {
   background-color: rgba(233, 233, 233, 0.5);
   border-radius: 10px;
-  color: #00c2cb;
+  color: #018e95;
 }
 
 .qHeader__input {
@@ -76,7 +76,7 @@
   cursor: pointer;
 }
 .qHeader__Rem > .MuiSvgIcon-root:hover {
-  color: #b92b27;
+  color: #018e95;
 }
 
 .qHeader__Rem > .MuiButton-root {
@@ -89,7 +89,7 @@
 
 .qHeader__Rem > .MuiButton-root:hover {
   color: #ffffff;
-  background: #8f1f1b;
+  background: #018e95;
 }
 
 .modal__title {
@@ -108,7 +108,7 @@
 }
 
 .modal__title > h5:hover {
-  color: #b92b27;
+  color: #00c2cb;
 }
 
 .modal__info {
@@ -187,3 +187,22 @@
   border-radius: 33px;
   cursor: pointer;
 }
+
+.cleardoubt :hover{
+  background-color: #024246;
+  cursor: pointer;
+}
+
+.modal__buttons > .add {
+  border: none;
+  outline: none;
+  margin-top: 5px;
+  background-color: #00c2cb;
+  color: white;
+  font-weight: 700;
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 33px;
+  cursor: pointer;
+}
+

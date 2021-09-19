@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Login from "./components/auth/Login";
-import Quora from "./components/Quora";
+import Discussly from "./components/Discussly";
 import StudentProfile from "./components/StudentProfile"
 import { login, logout, selectUser } from "./features/userSlice";
 import { auth } from "./firebase";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Profile from "./components/profile";
 function App() {
   const user = useSelector(selectUser);
@@ -34,7 +34,7 @@ function App() {
     <div className="App">
       {user ? (
         <switch>
-          <Route path="/" component={Quora} exact />
+          <Route path="/" component={Discussly} exact />
           <Route path="/profile/:id" component={Profile} exact />
           <Route path="/profile/student/:id" component={StudentProfile} exact />
 

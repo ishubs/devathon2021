@@ -15,15 +15,18 @@ const formatDate = date => {
 };
 
 const Message = ({
-  createdAt = null,
-  text = '',
-  displayName = '',
-  photoURL = '',
-}) => {
+    createdAt = null,
+    text = '',
+    displayName = '',
+      photoURL = '',
+      sender = '',
+    realsender
+  }) => {
+   
   if (!text) return null;
-
+console.log(sender, localStorage.getItem("sender"))
   return (
-    <div className="px-4 py-4 rounded-md hover:bg-gray-50 dark:hover:bg-coolDark-600 overflow-hidden flex items-start">
+    <div style={{border:"1px solid aqua"}}>
       {photoURL ? (
         <img
           src={photoURL}
@@ -33,18 +36,23 @@ const Message = ({
           height={45}
         />
       ) : null}
-      <div>
+      <div style=  {{  display: "flex",
+    flexDirection: "column",
+    /* align-content: flex-end; */
+              alignItems: sender==localStorage.getItem("sender") ? "end":""
+          }}>
         <div className="flex items-center mb-1">
-          {displayName ? (
-            <p className="mr-2 text-primary-500">{displayName}</p>
+          {sender ? (
+            <p className="mr-2 text-primary-500" >{sender.split("@")[0]}</p>
           ) : null}
-          {createdAt?.seconds ? (
-            <span className="text-gray-500 text-xs">
+
+        </div>
+              <p style={{ display: "flex", position: "relative", right: "0" }}>{text}</p>
+              {createdAt?.seconds ? (
+            <span className="text-gray-500 text-xs" style={{fontSize:"smaller"}}>
               {formatDate(new Date(createdAt.seconds * 1000))}
             </span>
           ) : null}
-        </div>
-        <p>{text}</p>
       </div>
     </div>
   );

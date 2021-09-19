@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import db from "../firebase";
-// Components
-import {email} from "../App"
+import db from "../../firebase";
 import firebase from 'firebase';
 import Message from './Message';
-import userSlice from '../features/userSlice';
 
 const Channel = (email1) => {
 
@@ -15,10 +12,10 @@ const Channel = (email1) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const reciever = email1.email1
-console.log(reciever)
   const inputRef = useRef();
   const bottomListRef = useRef();
   const sender = localStorage.getItem("sender")
+  const realsender = sender
   let id = ""
   const generateID = () => {
    
@@ -35,10 +32,9 @@ console.log(reciever)
   const query = db.collection('chatRoom').doc(generateID()).collection("chats").orderBy('createdAt').limit(100);
 
   
-  console.log(localStorage.getItem("sender"));
+  
   // const { uid, displayName, photoURL } = user;
-// console.log(user)
-  useEffect(() => {
+useEffect(() => {
     // Subscribe to query with onSnapshot
     const unsubscribe = query.onSnapshot(querySnapshot => {
       // Get all documents from collection - with IDs
@@ -57,7 +53,6 @@ console.log(reciever)
   const handleOnChange = e => {
     setNewMessage(e.target.value);
   };
-console.log(email)
   const handleOnSubmit = e => {
     e.preventDefault();
 
@@ -82,26 +77,25 @@ console.log(email)
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div style={{display:"flex", flexDirection:"column"}}>
       <div className="overflow-auto h-full">
         <div className="py-4 max-w-screen-lg mx-auto">
-          <div className="border-b dark:border-gray-600 border-gray-200 py-8 mb-4">
-            <div className="font-bold text-3xl text-center">
-              <p className="mb-1">Welcome to</p>
-              <p className="mb-3">React FireChat</p>
+          <div >
+            <div >
+              <p>{reciever}</p>
             </div>
             <p className="text-gray-400 text-center">
-              This is the beginning of this chat.
+              
             </p>
           </div>
-          <ul>
+          <ul style={{ listStyle:"none"}}>
             {messages
               ?.sort((first, second) =>
                 first?.createdAt?.seconds <= second?.createdAt?.seconds ? -1 : 1
               )
               ?.map(message => (
                 <li key={message.id}>
-                  <Message {...message} />
+                  <Message {...message}/>
                 </li>
               ))}
           </ul>
@@ -111,7 +105,6 @@ console.log(email)
       <div className="mb-6 mx-4">
         <form
           onSubmit={handleOnSubmit}
-          className="flex flex-row bg-gray-200 dark:bg-coolDark-400 rounded-md px-4 py-3 z-10 max-w-screen-lg mx-auto dark:text-white shadow-md"
         >
           <input
             ref={inputRef}
