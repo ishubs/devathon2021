@@ -1,52 +1,40 @@
 import React, { useEffect, useState, useRef } from 'react';
-import db from "../../firebase";
+import db from "../firebase";
 import firebase from 'firebase';
-import Message from './Message';
+import Message from '../components/chat/Message';
+import {useParams} from "react-router-dom"
 import { useSelector } from 'react-redux';
+import QHeader from './QHeader';
 // import { getAuth } from "firebase/auth";
 const Channel = (email1) => {
 
-  // const email = 
-  let sender = ""
- 
-const user = firebase.auth().currentUser;
-  if (user !== null) {
-    // The user object has basic properties such as display name, email, etc.
-    const displayName = user.displayName;
-     sender = user.email;
-    const photoURL = user.photoURL;
-    const emailVerified = user.emailVerified;
 
-    // The user's ID, unique to the Firebase project. Do NOT use
-    // this value to authenticate with your backend server, if
-    // you have one. Use User.getToke
-  }
+    
+    const { sender, reciever } = useParams()
+    
+ let id = ""
+
+    const generateID = () => {
+   
+      
+        if (sender.split("@")[0] < reciever.split("@")[0]) {
+         id = sender.split("@")[0] + "-" + reciever.split("@")[0];
+        } else {
+         id =  reciever.split("@")[0] + "-" + sender.split("@")[0];
+          }
+          
+          return id;
+        }
 
 // const email = useSelector()
-  const [docs, setDocs] = useState({})
   const messagesRef = db.collection('chatRoom');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const reciever = email1.email1
   const inputRef = useRef();
   const bottomListRef = useRef();
 
-  // const realsender = sender
-  console.log(sender)
-  console.log(reciever)
-  let id = ""
-  const generateID = () => {
-   
-      
-  if (sender.split("@")[0] < reciever.split("@")[0]) {
-     id = sender.split("@")[0] + "-" + reciever.split("@")[0];
-  } else {
-     id = reciever.split("@")[0] + "-" + sender.split("@")[0];
-    }
-    
-    return id;
-  }
 
+ 
   const query = db.collection('chatRoom').doc(generateID()).collection("chats").orderBy('createdAt').limit(100);
 
   
@@ -77,9 +65,9 @@ useEffect(() => {
     const trimmedMessage = newMessage.trim();
     if (trimmedMessage) {
       
-     messagesRef.doc(id).set({users:[sender, reciever]})
+     messagesRef.doc(generateID()).set({users:[sender, reciever]})
 
-      messagesRef.doc(id).collection("chats").add({
+      messagesRef.doc(generateID()).collection("chats").add({
         text: trimmedMessage,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         sender: sender
@@ -95,6 +83,8 @@ useEffect(() => {
   };
 
   return (
+    <div>
+    <QHeader />
     <div style={{display:"flex", flexDirection:"column"}}>
       <div className="overflow-auto h-full">
         <div className="py-4 max-w-screen-lg mx-auto">
@@ -141,7 +131,8 @@ useEffect(() => {
           </button>
         </form>
       </div>
-    </div>
+      </div>
+      </div>
   );
 };
 

@@ -8,11 +8,12 @@ import { login, logout, selectUser } from "./features/userSlice";
 import { auth } from "./firebase";
 import { Route } from "react-router-dom";
 import Profile from "./components/profile";
+import ChatScreen from "./components/ChatScreen"
+import Chat from "./components/Chat"
 function App() {
   const user = useSelector(selectUser);
   console.log(user)
   const dispatch = useDispatch();
-
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
@@ -27,7 +28,8 @@ function App() {
       } else {
         dispatch(logout());
       }
-      localStorage.setItem("sender",user.email)
+     
+      console.log(user.name)
     });
   }, [dispatch]);
   return (
@@ -35,6 +37,8 @@ function App() {
       {user ? (
         <switch>
           <Route path="/" component={Discussly} exact />
+          <Route path="/chat/:id" component={Chat} exact />
+          <Route path="/chat/:sender/:reciever" component={ChatScreen} exact />
           <Route path="/profile/:id" component={Profile} exact />
           <Route path="/profile/student/:id" component={StudentProfile} exact />
 

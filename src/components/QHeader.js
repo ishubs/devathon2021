@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HomeIcon from "@material-ui/icons/Home";
+import ChatIcon from "@material-ui/icons/Chat";
 import FeaturedPlayListOutlinedIcon from "@material-ui/icons/FeaturedPlayListOutlined";
 import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedInOutlined";
 import PeopleAltOutlinedIcon from "@material-ui/icons/PeopleAltOutlined";
@@ -23,6 +23,7 @@ function QHeader({field}) {
   const allInputs = {imgUrl: ''}
   // const [imageAsFile, setImageAsFile] = useState("");
   // const [imageAsUrl, setImageAsUrl] = useState(allInputs);
+  const [Privacy, setPrivacy] = useState("email")
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const [input, setInput] = useState("");
   const [inputUrl, setInputUrl] = useState("");
@@ -31,14 +32,18 @@ function QHeader({field}) {
   // const [fileHolder, setfileHolder] = useState("");
   const [uploading, setuploading] = useState(false)
   const questionName = input;
-
+  const Anonymous = {
+    email: "Anonymous",
+    photo: "",
+    disPlayName: "",
+}
   const handleQuestion = (e) => {
     e.preventDefault();
     setIsModalOpen(false);
     if (questionName) {
       db.collection(field).add({
-        user: user,
-        email:user.email,
+        user: Privacy == "email" ? user:Anonymous,
+        email: Privacy == "email" ? user.email: "Anonymous",
         question: input,
         imageUrl: inputUrl,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -50,7 +55,7 @@ function QHeader({field}) {
   };
 
 
-console.log(url)
+console.log(Privacy)
   async function handleFireBaseUpload(e) {
   setuploading(true)
   e.preventDefault();
@@ -75,26 +80,27 @@ console.log(url)
 
   return (
     <div className="qHeader">
-      <Link to="/">
-      <div className="qHeader__logo">
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/devathon-952a0.appspot.com/o/files%2Flogo.png?alt=media&token=35db4ac8-6e7e-4198-99e7-51dda808dc8c"
-          alt=""
-        />
-      </div></Link>
-      <div className="qHeader__icons">
-      
-        <div className="active qHeader__icon">
-          
-          {/* <HomeIcon /> */}
-        </div>
-       
+      <div>
+        <Link to="/">
+          <div className="qHeader__logo">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/devathon-952a0.appspot.com/o/files%2Flogo.png?alt=media&token=35db4ac8-6e7e-4198-99e7-51dda808dc8c"
+              alt=""/>
+          </div>
+        </Link>
       </div>
+
       <div className="qHeader__input">
         <SearchIcon />
         <input type="text" placeholder="Search Discussly" />
       </div>
+
       <div className="qHeader__Rem">
+      <Link to={"/chat/"+user.email}>
+        <div className="qHeader__icons">
+          <ChatIcon />
+        </div>
+      </Link>
         <div className="qHeader__avatar">
           <Avatar
             onClick={() => auth.signOut()}
@@ -106,7 +112,7 @@ console.log(url)
             }
           />
         </div>
-        {/* <LanguageIcon /> */}
+
         <Button onClick={() => setIsModalOpen(true)}>{field=="questions" ? "Ask Question": "Add Project"}</Button>
         <Modal
           isOpen={IsmodalOpen}
@@ -125,10 +131,7 @@ console.log(url)
             },
           }}
         >
-          <div className="modal__title">
-            <h5>Add Question</h5>
-            <h5>Share Link</h5>
-          </div>
+          
           <div className="modal__info">
             <Avatar
               className="avatar"
@@ -141,8 +144,17 @@ console.log(url)
             <p>{user.disPlayName ? user.disPlayName : user.email} asked</p>
             <div className="modal__scope">
               <PeopleAltOutlinedIcon />
-              <p>Public</p>
-              <ExpandMore />
+              
+              <select
+            value={Privacy}
+            onChange={(e) => {
+              setPrivacy(e.target.value);
+            }}
+          >
+                <option value="email">{ user.email}</option>
+            <option value="Anonymous">Anonymous</option>
+          </select>
+            
             </div>
           </div>
           <div className="modal__Field">

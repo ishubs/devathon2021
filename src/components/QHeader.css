@@ -1,6 +1,6 @@
 .qHeader {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   padding: 1px;
   background-color: white;
@@ -24,7 +24,7 @@
 }
 
 .qHeader__icons > .active > .MuiSvgIcon-root {
-  fill: #8f1f1b;
+  fill: #00c2cb;
 }
 
 .qHeader__icon > .MuiSvgIcon-root {
@@ -32,6 +32,8 @@
   background-color: white;
   padding: 5px 20px;
   color: gray;
+  height: 40px;
+  width: 40px;
 }
 
 .qHeader__icon > .MuiSvgIcon-root:hover {
@@ -65,6 +67,8 @@
 }
 .qHeader__Rem {
   display: flex;
+  flex: 0.3;
+  justify-content: space-around;
   align-items: center;
   margin-left: 25px;
 }
@@ -114,7 +118,6 @@
 .modal__info {
   display: flex;
   align-items: center;
-  margin-top: 30px;
 }
 
 .modal__info > p {
@@ -189,6 +192,11 @@
 }
 
 .cleardoubt :hover{
+  background-color: #024246;
+  cursor: pointer;
+}
+
+.link :hover{
   background-color: #024246;
   cursor: pointer;
 }

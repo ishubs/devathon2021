@@ -90,10 +90,10 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
           src={
             users.photo
               ? users.photo
-              : "https://images-platform.99static.com//_QXV_u2KU7-ihGjWZVHQb5d-yVM=/238x1326:821x1909/fit-in/500x500/99designs-contests-attachments/119/119362/attachment_119362573"
+              : "https://dp-client.com/CMS-NEW/assets/images/user/user11605616227.png"
           }
         />
-         <Link to={`profile/student/`+users.email}><h4 style={{paddingLeft:"15%"}}>{users.displayName ? users.displayName : users.email.split("@")[0]}</h4></Link>
+        {users.email=="Anonymous"?<h4 style={{paddingLeft:""}}>Anonymous</h4>:<Link to={`profile/student/`+users.email}><h4 style={{paddingLeft:"15%"}}>{users.displayName ? users.displayName : users.email.split("@")[0]}</h4></Link>}
         <small>{new Date(timestamp?.toDate()).toLocaleString()}</small>
       </div>
       <div className="post__body">
@@ -155,7 +155,7 @@ function Post({ Id, question, imageUrl, timestamp, users, file, upvote, field}) 
           </Modal>
         </div>
         
-       {file && <div><a target="_blank" href={file} >{ field=="questions"? "File":"Project File"}</a></div>}
+       {file && <a target="_blank" href={file} ><button className="fileButton">{ field=="questions"? "File":"Project File"}</button></a>}
         <div className="post__answer">
           {getAnswers.map(({ id, answers }) => (
             <p key={id} style={{ position: "relative", paddingBottom: "5px" , border:"black"}}>

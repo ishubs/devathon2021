@@ -43,7 +43,7 @@ console.log(sender, localStorage.getItem("sender"))
           }}>
         <div className="flex items-center mb-1">
           {sender ? (
-            <p className="mr-2 text-primary-500" >{sender.split("@")[0]}</p>
+            <p className="mr-2 text-primary-500" >{sender}</p>
           ) : null}
 
         </div>

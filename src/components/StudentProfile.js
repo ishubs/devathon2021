@@ -1,27 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom"
+import {useParams, Link} from "react-router-dom"
 import db from "../firebase";
 import QHeader from "./QHeader";
-import Channel from "./chat/Channel";
+
+import firebase from "firebase";
 import Post from "./Post";
-import Modal from "react-modal";
 function Profile() {
     let { id } = useParams()
-    const [user, setuser] = useState({})
     const [posts, setPosts] = useState([])
-    const [IsmodalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
-       
-        db.collection("student").where('email', '==', id).get()
-            .then((querySnapshot) => {
-                     
-                querySnapshot.forEach(element => {
-                    var data = element.data();
-                    console.log(data)
-                    setuser(data)
-                    
-                });
-            })
+            
         db.collection("questions").where('email', "==", id).onSnapshot((snapshot) =>
         setPosts(
           snapshot.docs.map((doc) => ({
@@ -29,13 +17,22 @@ function Profile() {
             questions: doc.data(),
           }))
         )
-      );
-
-            console.log(posts)
-          
-        }, [])
+      )
+ }, [])
     
-        console.log(posts)
+ let sender = "";
+
+ const user = firebase.auth().currentUser;
+
+ if (user !== null) {
+   // The user object has basic properties such as display name, email, etc.
+   const displayName = user.displayName;
+   sender = user.email;
+   const photoURL = user.photoURL;
+   const emailVerified = user.emailVerified;
+
+ }
+    
     
     return (
         <div>
@@ -47,7 +44,10 @@ function Profile() {
                     src="https://dp-client.com/CMS-NEW/assets/images/user/user11605616227.png" />
                 <div style={{ display: "flex", flexDirection: "column", paddingLeft:"5%", justifyContent:"space-around" }}>
                     <h1 className="App" style={{ alignSelf: "center", paddingLeft: "5%" }}>{id}</h1>
-                    <button style={{height: "25%", width: "50%", fontSize: "larger", backgroundColor: "#189AB4", border: "none",borderRadius: "13%",color: "black",fontWeight: "bold"}}>Student</button>
+                    <div style={{height:"25%", display:"flex", justifyContent: "space-around"}}>
+                    <button class="mdc-button" style={{ fontSize: "larger", backgroundColor: "#189AB4", border: "none",borderRadius: "13%",color: "black",fontWeight: "bold",width:"40%"}}>Student</button>
+                   <Link class="mdc-button mdc-button--raised" to={"/chat/"+sender+"/"+id} style={{display:"block", height:"100%", width:"40%", textAlign:"center", backgroundColor:"#189AB4"}}> <button style={{height: "100%", width: "100%", fontSize: "larger", backgroundColor: "#189AB4", border: "none",borderRadius: "13%",color: "black",fontWeight: "bold"}}>Chat</button></Link>
+                   </div>
                 </div>
                 
                
@@ -67,7 +67,6 @@ function Profile() {
         />
             ))}
         </div>
-        <div style={{display:"flex", position:"fixed", right: "5%", bottom: 0}}><Channel email1={ id}/></div>
             
         </div>
     );
